@@ -47,8 +47,8 @@ const QuestionCard = ({ type }: { type: string }) => {
     (state: RootState) => state.questionCard.allUserAnswers
   );
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.ctrlKey && event.key === "Enter") handleNextQuestion();
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.ctrlKey && e.key === "Enter") handleNextQuestion();
   };
 
   const renderQuestionType = (type: string) => {

@@ -15,7 +15,7 @@ const MainMenu = () => {
       <Typography.Title>Main Menu</Typography.Title>
       <Card className={styles["mainmenu-container"]}>
         {links.map((link) => (
-          <MenuButton link={link} />
+          <MenuButton key={link.tabIndex} link={link} />
         ))}
       </Card>
     </div>
