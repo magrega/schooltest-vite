@@ -5,7 +5,7 @@ import styles from "./Loader.module.css";
 const Loader = () => {
   return (
     <div className={styles["loader-container"]}>
-      <Title>Loading questions...</Title>
+      <Title>Loading...</Title>
       <span className={styles.loader}></span>
       <BackToMenuButton />
     </div>
