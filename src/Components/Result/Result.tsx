@@ -4,7 +4,7 @@ import BackToMenuButton from "../UI/BackToMenuButton/BackToMenuButton";
 import styles from "./Result.module.css";
 
 const Results = () => {
-  let { state } = useLocation();
+  const { state } = useLocation();
   if (!state) return <Navigate to={"/"} />;
 
   const stateKeys: string[][] = Object.values(state);
@@ -15,7 +15,7 @@ const Results = () => {
         header={<Typography.Title>Your answers:</Typography.Title>}
         footer={<BackToMenuButton />}
         bordered
-        locale={{ emptyText: "No answers been given" }}
+        locale={{ emptyText: "No answer have been given" }}
         dataSource={stateKeys}
         renderItem={(item, index) => (
           <List.Item>

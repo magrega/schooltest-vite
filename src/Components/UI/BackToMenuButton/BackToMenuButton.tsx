@@ -1,13 +1,12 @@
 import { Button } from "antd";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { resetCard } from "../../../state/questionCard/questionCard";
-import { AppDispatch } from "../../../state/store";
+import { useActions } from "../../../hooks/useActions";
 
 const BackToMenuButton = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const { resetCard } = useActions();
+
   const clearState = () => {
-    dispatch(resetCard());
+    resetCard();
     localStorage.clear();
   };
   return (

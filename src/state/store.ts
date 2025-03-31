@@ -1,13 +1,13 @@
 import { configureStore, isAnyOf } from "@reduxjs/toolkit";
 import { listenerMiddleware, startAppListening } from "./listenerMiddleware";
-import questionCardReducer, {
-  countdown,
-  setAllUserAnswers,
-  setNextQuestion,
-} from "./questionCard/questionCard";
+import questionCardReducer, { actions } from "./questionCard/questionCard";
 
 startAppListening({
-  matcher: isAnyOf(countdown, setNextQuestion, setAllUserAnswers),
+  matcher: isAnyOf(
+    actions.tick,
+    actions.setNextQuestion,
+    actions.setAllUserAnswers
+  ),
   effect: ({ type }, { getState }) => {
     if (type === "questionCard/countdown")
       localStorage.setItem(
@@ -18,10 +18,6 @@ startAppListening({
       localStorage.setItem(
         "allUserAnswers",
         JSON.stringify(getState().questionCard.allUserAnswers)
-      );
-      localStorage.setItem(
-        "answersBatchNum",
-        JSON.stringify(getState().questionCard.answersBatchNum)
       );
       localStorage.setItem(
         "questionNum",

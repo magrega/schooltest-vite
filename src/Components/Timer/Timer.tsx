@@ -1,26 +1,37 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { countdown, setIsTimeout } from "../../state/questionCard/questionCard";
-import { AppDispatch, RootState } from "../../state/store";
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import { useActions } from "../../hooks/useActions";
+import { RootState } from "../../state/store";
 import styles from "./Timer.module.css";
 
 const Timer = () => {
   const countdownValue = useSelector(
     (state: RootState) => state.questionCard.timer
   );
-  const dispatch = useDispatch<AppDispatch>();
+  const isTimeOut = useSelector(
+    (state: RootState) => state.questionCard.isTimeOut
+  );
+  const allUserAnswers = useSelector(
+    (state: RootState) => state.questionCard.allUserAnswers
+  );
+
+  const { tick, setIsTimeout } = useActions();
 
   useEffect(() => {
     const timerCountdown = setTimeout(() => {
-      if (countdownValue === 0) {
+      if (countdownValue <= 0) {
         clearTimeout(timerCountdown);
-        dispatch(setIsTimeout(true));
+        setIsTimeout(true);
       }
-      dispatch(countdown());
+      tick();
     }, 1000);
 
     return () => clearTimeout(timerCountdown);
-  }, [dispatch, countdownValue]);
+  }, [countdownValue, setIsTimeout, tick]);
+
+  if (isTimeOut)
+    return <Navigate to="/results" state={allUserAnswers} replace />;
 
   return (
     <span

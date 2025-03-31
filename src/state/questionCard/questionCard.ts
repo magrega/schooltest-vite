@@ -1,25 +1,9 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getTestData } from "../../services/fakeapi";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchQuestions } from "../../services/api";
+import { QuestionCardState, TQuestion } from "./../../types/types";
 
-export interface QuestionCardState {
-  isLoading: boolean;
-  isError: boolean;
-  isTimeOut: boolean;
-  timer: number;
-  questions: string[];
-  questionNum: number;
-  answersBatchNum: number;
-  answers: string[];
-  userAnswer: object;
-  allUserAnswers: object;
-  currentAnswers: string[];
-}
 const desiredTime = 15 * 60;
-
 const lSquestionNum = JSON.parse(localStorage.getItem("questionNum") || "0");
-const lSanswersBatchNum = JSON.parse(
-  localStorage.getItem("answersBatchNum") || "0"
-);
 const lSallUserAnswers = JSON.parse(localStorage.getItem("allUserAnswers")!);
 
 const initialState: QuestionCardState = {
@@ -27,30 +11,18 @@ const initialState: QuestionCardState = {
   isTimeOut: false,
   isError: false,
   questions: [],
-  answers: [],
   questionNum: lSquestionNum,
-  answersBatchNum: lSanswersBatchNum,
   userAnswer: {},
   allUserAnswers: lSallUserAnswers || {},
   timer: JSON.parse(localStorage.getItem("timer")!) || desiredTime,
-  currentAnswers: [],
 };
 
 const questionCardSlice = createSlice({
   name: "questionCard",
   initialState,
   reducers: {
-    setIsLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
     setIsTimeout: (state, action: PayloadAction<boolean>) => {
       state.isTimeOut = action.payload;
-    },
-    setQuestions: (state, action: PayloadAction<string[]>) => {
-      state.questions = action.payload;
-    },
-    setAnswers: (state, action: PayloadAction<string[]>) => {
-      state.answers = action.payload;
     },
     setUserAnswer: (state, action: PayloadAction<object>) => {
       state.userAnswer = action.payload;
@@ -58,23 +30,17 @@ const questionCardSlice = createSlice({
     setAllUserAnswers: (state, action: PayloadAction<object>) => {
       state.allUserAnswers = { ...state.allUserAnswers, ...action.payload };
     },
-    countdown: (state) => {
+    tick: (state) => {
       state.timer = state.timer - 1;
     },
     setNextQuestion: (state) => {
       state.questionNum++;
-      state.answersBatchNum = state.answersBatchNum + 4;
       state.allUserAnswers = { ...state.allUserAnswers, ...state.userAnswer };
-      state.currentAnswers = state.answers.slice(
-        state.answersBatchNum,
-        state.answersBatchNum + 4
-      );
     },
     resetCard: () => {
       return {
         ...initialState,
         questionNum: 0,
-        answersBatchNum: 0,
         allUserAnswers: {},
         timer: desiredTime,
       };
@@ -84,13 +50,8 @@ const questionCardSlice = createSlice({
     builder
       .addCase(
         fetchData.fulfilled,
-        (state, action: PayloadAction<string[][]>) => {
-          state.questions = action.payload[0];
-          state.answers = action.payload[1];
-          state.currentAnswers = state.answers.slice(
-            state.answersBatchNum,
-            state.answersBatchNum + 4
-          );
+        (state, action: PayloadAction<TQuestion[]>) => {
+          state.questions = action.payload;
           state.isLoading = false;
         }
       )
@@ -101,18 +62,8 @@ const questionCardSlice = createSlice({
 });
 
 export const fetchData = createAsyncThunk("questionCard/fetchData", async () =>
-  getTestData()
+  fetchQuestions()
 );
 
-export const {
-  setIsLoading,
-  setIsTimeout,
-  setQuestions,
-  setAnswers,
-  setUserAnswer,
-  setAllUserAnswers,
-  countdown,
-  setNextQuestion,
-  resetCard,
-} = questionCardSlice.actions;
+export const { actions } = questionCardSlice;
 export default questionCardSlice.reducer;
