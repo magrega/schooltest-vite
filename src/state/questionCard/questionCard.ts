@@ -56,6 +56,7 @@ const questionCardSlice = createSlice({
         }
       )
       .addCase(fetchData.rejected, (state) => {
+        state.isLoading = false;
         state.isError = true;
       });
   },
