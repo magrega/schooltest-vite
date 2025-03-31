@@ -9,20 +9,14 @@ startAppListening({
     actions.setAllUserAnswers
   ),
   effect: ({ type }, { getState }) => {
-    if (type === "questionCard/countdown")
-      localStorage.setItem(
-        "timer",
-        JSON.stringify(getState().questionCard.timer)
-      );
+    const {
+      questionCard: { timer, allUserAnswers, questionNum },
+    } = getState();
+    if (type === "questionCard/tick")
+      localStorage.setItem("timer", JSON.stringify(timer));
     if (type === "questionCard/setNextQuestion") {
-      localStorage.setItem(
-        "allUserAnswers",
-        JSON.stringify(getState().questionCard.allUserAnswers)
-      );
-      localStorage.setItem(
-        "questionNum",
-        JSON.stringify(getState().questionCard.questionNum)
-      );
+      localStorage.setItem("allUserAnswers", JSON.stringify(allUserAnswers));
+      localStorage.setItem("questionNum", JSON.stringify(questionNum));
     }
   },
 });
@@ -35,5 +29,6 @@ export const store = configureStore({
     getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type AppStore = typeof store;
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];

@@ -1,16 +1,11 @@
 import { Steps } from "antd";
-import { useSelector } from "react-redux";
-import { RootState } from "../../state/store";
+import { useAppSelector } from "../../hooks/useTypedSelector";
 import Timer from "../Timer/Timer";
 import styles from "./QuestionCard.module.css";
 
 const Indicators = () => {
-  const questions = useSelector(
-    (state: RootState) => state.questionCard.questions
-  );
-  const questionNum = useSelector(
-    (state: RootState) => state.questionCard.questionNum
-  );
+  const questions = useAppSelector((state) => state.questionCard.questions);
+  const questionNum = useAppSelector((state) => state.questionCard.questionNum);
 
   return (
     <div className={styles["quiz-indicators"]}>

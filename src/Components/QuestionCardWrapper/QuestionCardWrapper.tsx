@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useActions } from "../../hooks/useActions";
-import { RootState } from "../../state/store";
+import { useAppSelector } from "../../hooks/useTypedSelector";
 import { QuestionCardType } from "../../types/types";
 import ErrorPage from "../ErrorPage/ErrorPage";
 import QuestionCard from "../QuestionCard/QuestionCard";
@@ -12,10 +11,8 @@ interface QuestionCardWrapperProps {
 }
 
 const QuestionCardWrapper = ({ type }: QuestionCardWrapperProps) => {
-  const isError = useSelector((state: RootState) => state.questionCard.isError);
-  const isLoading = useSelector(
-    (state: RootState) => state.questionCard.isLoading
-  );
+  const isError = useAppSelector((state) => state.questionCard.isError);
+  const isLoading = useAppSelector((state) => state.questionCard.isLoading);
   const { fetchData } = useActions();
 
   useEffect(() => {

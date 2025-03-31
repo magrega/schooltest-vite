@@ -1,19 +1,14 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
-import { RootState } from "../../state/store";
+import { useAppSelector } from "../../hooks/useTypedSelector";
 import styles from "./Timer.module.css";
 
 const Timer = () => {
-  const countdownValue = useSelector(
-    (state: RootState) => state.questionCard.timer
-  );
-  const isTimeOut = useSelector(
-    (state: RootState) => state.questionCard.isTimeOut
-  );
-  const allUserAnswers = useSelector(
-    (state: RootState) => state.questionCard.allUserAnswers
+  const countdownValue = useAppSelector((state) => state.questionCard.timer);
+  const isTimeOut = useAppSelector((state) => state.questionCard.isTimeOut);
+  const allUserAnswers = useAppSelector(
+    (state) => state.questionCard.allUserAnswers
   );
 
   const { tick, setIsTimeout } = useActions();
