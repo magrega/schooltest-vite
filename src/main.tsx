@@ -8,10 +8,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from "./App";
-import QuestionCard from "./Components/QuestionCard/QuestionCard";
 import Results from "./Components/Result/Result";
 import "./index.css";
 import { store } from "./state/store";
+import QuestionCardWrapper from "./Components/QuestionCardWrapper/QuestionCardWrapper";
 
 const router = createBrowserRouter(
   [
@@ -21,19 +21,19 @@ const router = createBrowserRouter(
     },
     {
       path: "single-choice",
-      element: <QuestionCard type={"single-choice"} />,
+      element: <QuestionCardWrapper type={"single-choice"} />,
     },
     {
       path: "multiple-choice",
-      element: <QuestionCard type={"multiple-choice"} />,
+      element: <QuestionCardWrapper type={"multiple-choice"} />,
     },
     {
       path: "short-written",
-      element: <QuestionCard type={"short-written"} />,
+      element: <QuestionCardWrapper type={"short-written"} />,
     },
     {
       path: "long-written",
-      element: <QuestionCard type={"long-written"} />,
+      element: <QuestionCardWrapper type={"long-written"} />,
     },
     {
       path: "results",

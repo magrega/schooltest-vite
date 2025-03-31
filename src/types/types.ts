@@ -15,3 +15,9 @@ export interface QuestionCardState {
   userAnswer: object;
   allUserAnswers: object;
 }
+
+export type QuestionCardType =
+  | "single-choice"
+  | "multiple-choice"
+  | "short-written"
+  | "long-written";

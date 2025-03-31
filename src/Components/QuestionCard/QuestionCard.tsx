@@ -1,31 +1,14 @@
-import {
-  Button,
-  Card,
-  Checkbox,
-  Divider,
-  Form,
-  Input,
-  Radio,
-  Typography,
-} from "antd";
-import { useEffect } from "react";
+import { Button, Card, Divider, Form, Typography } from "antd";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { useActions } from "../../hooks/useActions";
 import { RootState } from "../../state/store";
-import ErrorPage from "../ErrorPage/ErrorPage";
-import MainMenu from "../MainMenu/MainMenu";
 import BackToMenuButton from "../UI/BackToMenuButton/BackToMenuButton";
-import Loader from "../UI/Loader/Loader";
 import Indicators from "./Indicators";
 import styles from "./QuestionCard.module.css";
+import { RenderQuestionType } from "./RenderQuestionType";
 
 const QuestionCard = ({ type }: { type: string }) => {
-  const isError = useSelector((state: RootState) => state.questionCard.isError);
-  const isLoading = useSelector(
-    (state: RootState) => state.questionCard.isLoading
-  );
-
   const questions = useSelector(
     (state: RootState) => state.questionCard.questions
   );
@@ -36,49 +19,11 @@ const QuestionCard = ({ type }: { type: string }) => {
     (state: RootState) => state.questionCard.allUserAnswers
   );
 
-  const { setUserAnswer, setNextQuestion, fetchData } = useActions();
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.ctrlKey && e.key === "Enter") handleNextQuestion();
-  };
-
-  const renderQuestionType = (type: string) => {
-    switch (type) {
-      case "single-choice":
-        return (
-          <Radio.Group
-            className={styles.group}
-            options={questions[questionNum].answers}
-          />
-        );
-      case "multiple-choice":
-        return (
-          <Checkbox.Group
-            className={styles.group}
-            options={questions[questionNum].answers}
-          />
-        );
-      case "short-written":
-        return <Input autoFocus />;
-      case "long-written":
-        return <Input.TextArea autoFocus onKeyDown={handleKeyDown} />;
-      default:
-        return <MainMenu />;
-    }
-  };
+  const { setUserAnswer, setNextQuestion } = useActions();
 
   const handleFormChange = (answer: object) => setUserAnswer(answer);
   const handleNextQuestion = () => setNextQuestion();
 
-  // fetch data
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  if (isError) return <ErrorPage />;
-  if (isLoading) return <Loader />;
-
-  // check if the test ended
   if (questionNum === questions.length)
     return <Navigate to="/results" state={allUserAnswers} replace />;
 
@@ -103,7 +48,7 @@ const QuestionCard = ({ type }: { type: string }) => {
             name={`answers${questionNum}`}
             rules={[{ required: true, message: "Enter your answer!" }]}
           >
-            {renderQuestionType(type)}
+            {RenderQuestionType(type, questions[questionNum].answers)}
           </Form.Item>
 
           <Form.Item>
